@@ -1,0 +1,232 @@
+<!-- <h4>hiiiiiiiiii {{request.user.username}}</h4> -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+  
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+  
+     <!-- jQuery library file -->
+     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js">
+     </script>
+  
+      <!-- Datatable plugin JS library file -->
+     <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js">
+     </script>
+  
+  <script>
+
+    $(document).ready(function() {
+      $('#tabledata').DataTable();
+    });
+  </script>
+</head>
+
+<body>
+    
+    <br>
+    {% if data_map.alluser %}
+                <div class="container-fluid" >
+                    <div class="col-md-6">
+                        <div class="card" style="background-color: lavender;">
+                        <div class="card-header">
+                            <h3>Amount Distribution</h3>
+                        <div class="card-body">
+
+                        
+                    <form method="POST">
+                        {% csrf_token %}
+                        <label >Choose a Employee:</label>
+                        <select name="employee" id="employee" class="form-control">
+                            <option value="Default">Default</option>
+                            {% for emp in data_map.alluser %}
+                            <option value="{{ emp.id}}">{{ emp.fname}} {{emp.lname}}</option>
+                            {% endfor %}                
+                        </select>
+                        <br>
+                        <label >Amount</label>
+                        <input type="number" name="amount" id="amount" class="form-control">
+                        <br>
+
+                        <input type="submit" value="submit" name="saveemp" class="btn btn-success">
+
+                    </form>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+
+    {% endif %}
+
+<br>
+{% if data_map.allemp %}
+                <div class="container-fluid">
+                   
+                        <table id="tabledata" class="table table-striped">
+                            <h5>Total Amount Distribution</h5>
+                        <tr>
+                            <th>Id</th>
+                          <th>Name</th>
+                          <th>Amount Received</th>
+                          <th>Date</th>
+                         
+                        </tr>
+                        {% for emp in data_map.allemp %}
+                     
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                          <td> {{ emp.emp__fname}} {{emp.emp__lname}} <span style="display:none ;">{{emp.emp__id}}</span></td>
+                          <td>{{emp.remain_amt}}</td>
+                          <td>{{emp.created_at}}</td>
+                        </tr>
+                        {% endfor %}
+                        
+                      </table>
+                   
+                
+                </div>  
+                
+                {% endif %}
+                {% if data_map.get_emp_data.remain_amt %}
+                <div class="container-fluid" >
+                    <div class="col-md-6">
+                        <div class="card" style="background-color: lavender;">
+                        <div class="card-header">
+                            <h3>Amount Table</h3>
+                        <div class="card-body">
+
+                            
+                          
+                            
+                    <form method="POST">
+                        {% csrf_token %}
+                      
+                        
+                       
+
+                        <label>Total Amount Recieved  </label>
+                       
+                        <input type="number" value="{{data_map.get_emp_data.remain_amt}}" class="form-control" disabled>
+                        <!-- <label>Amount have </label>
+                       
+                        <input type="number" value="{{data_map.individualremaining.remain_amt}}" class="form-control" disabled> -->
+                        
+                        
+                        <label> Amount To Spend </label>
+                        <input type="number" name="purchaseamount" class="form-control">
+
+                        <label> Spended on </label>
+                        <input type="text" name="product" class="form-control">
+
+                        <label> Date </label>
+                        <input type="date" name="mydate" class="form-control">
+                        <br>
+
+                        <input type="number" style="display: none;" name="hiddenpreviousamt" value="{{data_map.get_emp_data.remain_amt}}">
+
+                        <input type="submit" value="submit" name="empproduct" class="btn btn-success" >
+                        
+                        
+                    </form>
+                    
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                {% endif %}
+
+
+
+
+<br>
+
+{% if data_map.individualremaining %}
+                <div class="container-fluid">
+                   
+                    <table id="tabledata" class="table table-striped">
+                        <h5>Total Chart</h5>
+                        
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Spended on</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                     
+                    </tr>
+                    {% for emp in data_map.individualremaining %}
+                 
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                      <td>{{emp.purchased}}</td>
+                      <td>{{emp.cost_amount}}</td>
+                      <td>{{emp.created_at}}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                  </table>
+               
+            
+            </div>  
+
+    {% endif %}
+    <br>
+
+                
+
+
+
+<br> 
+{% if data_list %}
+<div class="container-fluid">
+                   
+    <table id="tabledata" class="table table-striped">
+        <h5> Total Distribution</h5>
+    <tr>
+       
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Amount Spended On</th>
+     
+    </tr>
+    {% for item in data_list %}
+        {% for i in item %}
+    <tr>
+       
+      <td>{{i.user_emp__fname }} {{ i.user_emp__lname }}</td>
+
+  
+      <td>{{i.cost_amount }}</td>
+      <td>{{i.created_at }}</td>
+      <td>{{i.purchased }}</td>
+    </tr>
+    {% endfor %}
+
+
+{% endfor %}
+    
+  </table>
+
+
+
+
+</div> 
+
+{% endif %}
+
+<br>
+                
+                
+
+</body>
+</html>
+
